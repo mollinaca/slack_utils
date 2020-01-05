@@ -4,9 +4,11 @@ import logging
 import urllib.request
 import json
 import time
+import datetime
+import pathlib # 3.4 >=
 from slack_utils.slack_api import Api
 """
-slack_api で定義される Slack API を実行し、結果を取得する
+core() から渡されたコマンド、およびオプションを解析し、slack_api で定義される Slack API を実行し、結果を取得する
 取得した結果を機能ごとに処理し、以下のいずれか、または組み合わせで出力する
 * stdout
 * slack へメッセージをPOST
@@ -43,29 +45,38 @@ def post (args:dict):
     print (json.dumps(res, indent=4))
     exit (0)
 
-def conv_list (argv:list):
-    if argv[0:1]:
-        if argv[0] == "public":
-            argv.insert (0, "public_channel")
-        elif argv[0] == "private":
-            argv.insert (0, "private_channel")
-        else:
-            argv.insert (0, "public_channel,private_channel")
-    else:
-        argv.insert (0, "public_channel,private_channel")
+def conv_list (args:dict):
+    now = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
 
-    if argv[1:2]:
-        if not argv[1] == "true" or not argv[1] == "true" :
-            argv.insert(1, "true")
-    else:
-        argv.insert(1, "true")
+    # まず1回実行する
+    api = Api ()
+    res = api.conv_list (args)
 
-    next_cursor = "default"
-    argv.insert (2, next_cursor)
-    while not next_cursor:
-        api = Api ()
-        res = api.conv_list (argv)
-        print (json.dumps(res, indent=4))
+    # 結果をファイル出力する
+    output_files = []
+    i = 1
+    p = pathlib.Path()
+    output_file_dir = p.resolve().joinpath('output')
+    output_file = str(output_file_dir) + "/conv_list_" + now + "_" + str(i) + ".json"
+    output_files.append(output_file)
+    with open(output_file, mode='w') as f:
+        f.write(json.dumps(res, indent=4))
+        
+    # next_cursor の有無を確認する
+    if res['response_metadata']['next_cursor']:
+        args['next_cursor'] = str(res['response_metadata']['next_cursor'])
 
+        while args['next_cursor']:
+            # next_cursor が空になるまで実行する
+            i += 1
+            api = Api ()
+            res = api.conv_list (args)
+            output_file = str(output_file_dir) + "/conv_list_" + now + "_" + str(i) + ".json"
+            output_files.append(output_file)
+            with open(output_file, mode='w') as f:
+                f.write(json.dumps(res, indent=4))
+            args['next_cursor'] = res['response_metadata']['next_cursor']
+
+    print ("output files:")
+    [print (output_file) for output_file in output_files]
     exit (0)
-

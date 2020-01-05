@@ -33,7 +33,7 @@ def main():
     parser.add_argument('-c', '--channel', help='channel_id or channel_name (default set in config.ini)')
     parser.add_argument('-m', '--message', help='simple string message to post (default "no message")', default='no message')
     parser.add_argument('-t', '--types', help='type of target channels (default both of public and private)', default='public_channel, private_channel')
-    parser.add_argument('-e', '--exclude_archives', help='exclude_archives (default true)', default='true')
+    parser.add_argument('-e', '--exclude_archived', help='exclude_archived(default true)', default='true')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)

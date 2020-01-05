@@ -160,32 +160,32 @@ class Api():
         body = res.exec (req)
         return body
 
-    def conv_list (self, argv:list):
+    def conv_list (self, args:dict):
         """
         https://api.slack.com/methods/conversations.list
         arg:
-            argv:list
-            argv[0]: types
-            argv[1]: exclude_archived
-            argv[2]: next_cursor
+            types
+            exclude_arvhiced
+            next_cursor
         default:
             types: "public, private"
             exclude_archived: "true"
+            next_cursor: null
         """
-        print (argv)
         res = Exec_api ()
         res.conf ()
-        api = "conversations.list"
         method = "GET"
-        url = api_url + api
+        url = "https://slack.com/api/conversations.list"
         params = {
             'token': token,
-            'types': argv[0],
-            'exclude_archived': argv[1],
-            'limit': 1000,
+            'types': args['types'],
+            'exclude_archived': args['exclude_archived'],
+            'limit': 1000
         }
+        if args['next_cursor']:
+            params['cursor'] = args['next_cursor']
 
         req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
         body = res.exec (req)
-#        print (json.dumps(body, indent=4))
+
         return body

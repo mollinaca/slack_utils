@@ -57,10 +57,13 @@ def core (args):
             args_d['channel'] = str(args.channel)
         post (args_d)
 
-#    elif command == "conv_list":
-#        print (argv)
-#        logging.info('conv_list()')
-#        conv_list (argv[0:])
+    elif command == "conv_list":
+        args_d = {
+            'types' : args.types,
+            'exclude_archived' : args.exclude_archived,
+            'next_cursor': ""
+        }
+        conv_list (args_d)
 
     else:
         usage ()
