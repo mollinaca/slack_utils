@@ -130,64 +130,49 @@ class Api():
             if body == "ok":
                 body = json.loads('{"ok": true}')
         return body
-#
-#    def post (argv:list):
-#        """
-#        https://api.slack.com/methods/chat.postMessage
-#        """
-#        res = Exec_api ()
-#        res.conf ()
-#        message = str(argv[0])
-#        method = "POST"
-#        headers = {
-#            "Content-Type": "application/json",
-#        }
-#        url = "https://slack.com/api/chat.postMessage?token=" + token + "&channel=" + channel + "&text=" + message
-#        req = urllib.request.Request (url, method=method, headers=headers)
-#        body = res.exec (req)
+
+    def post (self, argv:list):
+        """
+        https://api.slack.com/methods/chat.postMessage
+        """
+        res = Exec_api ()
+        res.conf ()
+        message = str(argv[0])
+        method = "POST"
+        headers = {
+            "Content-Type": "application/json",
+        }
+        url = "https://slack.com/api/chat.postMessage?token=" + token + "&channel=" + channel + "&text=" + message
+        req = urllib.request.Request (url, method=method, headers=headers)
+        body = res.exec (req)
+        return body
+
+    def conv_list (self, argv:list):
+        """
+        https://api.slack.com/methods/conversations.list
+        arg:
+            argv:list
+            argv[0]: types
+            argv[1]: exclude_archived
+            argv[2]: next_cursor
+        default:
+            types: "public, private"
+            exclude_archived: "true"
+        """
+        print (argv)
+        res = Exec_api ()
+        res.conf ()
+        api = "conversations.list"
+        method = "GET"
+        url = api_url + api
+        params = {
+            'token': token,
+            'types': argv[0],
+            'exclude_archived': argv[1],
+            'limit': 1000,
+        }
+
+        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
+        body = res.exec (req)
 #        print (json.dumps(body, indent=4))
-#        return 0
-#
-#    def conv_list (argv:list):
-#        """
-#        https://api.slack.com/methods/conversations.list
-#        default:
-#            types: public, private
-#            exclude_archived: true
-#        """
-#        # options
-#        types = "public_channel,private_channel"
-#        exclude_archived = "true"
-#
-#        if argv[0:1]:
-#            if argv[0] == "public":
-#                types = "public_channel"
-#            elif argv[0] == "private":
-#                types = "private_channel"
-#            else:
-#                types = "public_channel,private_channel"
-#
-#        if argv[1:2]:
-#            if argv[1] == "true":
-#                exclude_archived = "true"
-#            elif argv[1] == "false":
-#                exclude_archived = "false"
-#            else:
-#                exclude_archived = "true"
-#
-#        res = Exec_api ()
-#        res.conf ()
-#        api = "conversations.list"
-#        method = "GET"
-#        url = api_url + api
-#        params = {
-#            'token': token,
-#            'types': types,
-#            'exclude_archived': exclude_archived,
-#            'limit': 1000,
-#        }
-#
-#        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
-#        body = res.exec (req)
-#        print (json.dumps(body, indent=4))
-#        return 0
+        return body
