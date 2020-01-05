@@ -22,3 +22,19 @@ def api_test ():
     api = Api ()
     res = api.api_test ()
     print (json.dumps(res, indent=4))
+    exit (0)
+
+def auth_test ():
+    api = Api ()
+    res = api.auth_test ()
+    print (json.dumps(res, indent=4))
+    exit (0)
+
+def incoming_webhook (argv:list):
+    if not argv[0:1]:
+        logging.warning('Usage -> $ slack_utils incoming_webhook ${message}')
+        exit (1)
+    api = Api ()
+    res = api.incoming_webhook (argv)
+    print (json.dumps(res, indent=4))
+    exit (0)

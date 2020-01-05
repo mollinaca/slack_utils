@@ -1,8 +1,7 @@
 import sys
 import logging
 from optparse import OptionParser
-#from slack_utils.functions import api_test, auth_test, incoming_webhook, post, post_quote, conv_list
-from slack_utils.functions import api_test
+from slack_utils.functions import api_test, auth_test, incoming_webhook
 """
 実行例:
   $ slack_utils api_test
@@ -28,21 +27,15 @@ def command (argv:list):
     if command == "test":
         print ("test")
         exit (0)
+
     elif command == "api_test":
         api_test ()
 
-#    elif command == "auth_test":
-#        auth_test ()
-#
-#    elif command == "incoming_webhook":
-#        """
-#        incoming-webhook を使ったシンプルなメッセージのPOST
-#        """
-#        if argv[1:2]:
-#            incoming_webhook (argv[1:])
-#        else:    
-#            logging.warning('Usage -> $ slack_utils incoming_webhook ${message}')
-#            exit (1)
+    elif command == "auth_test":
+        auth_test ()
+
+    elif command == "incoming_webhook":
+        incoming_webhook (argv[1:])
 #
 #    elif command == "post":
 #        if argv[1:2]:

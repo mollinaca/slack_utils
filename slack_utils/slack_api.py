@@ -106,29 +106,30 @@ class Api():
         }
         req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)))
         body = res.exec (req)
-        print (json.dumps(body, indent=4))
-        return 0
+        return body
 
-#    def incoming_webhook (argv:list):
-#        """
-#        use incoimng-webhook
-#        incoming-webhook は結果をjsonで返さないので、これだけ特殊処理
-#        """
-#        res = Exec_api ()
-#        res.conf ()
-#        message = str(argv[0])
-#        data = {
-#            "text": message
-#        }
-#        headers = {
-#            "Content-Type": "application/json",
-#        }
-#        url = webhook_url
-#        req = urllib.request.Request(url, json.dumps(data).encode(), headers)
-#        with urllib.request.urlopen(req) as res:
-#            body = res.read().decode('utf-8')
-#            logging.info ("responsebody:"+body)
-#        return 0
+    def incoming_webhook (self, argv:list):
+        """
+        use incoimng-webhook
+        incoming-webhook は結果をjsonで返さないので、これだけ特殊処理
+        """
+        res = Exec_api ()
+        res.conf ()
+        message = str(argv[0])
+        data = {
+            "text": message
+        }
+        headers = {
+            "Content-Type": "application/json",
+        }
+        url = webhook_url
+        req = urllib.request.Request(url, json.dumps(data).encode(), headers)
+        with urllib.request.urlopen(req) as res:
+            body = res.read().decode('utf-8')
+            logging.info ("responsebody:"+body)
+            if body == "ok":
+                body = json.loads('{"ok": true}')
+        return body
 #
 #    def post (argv:list):
 #        """
