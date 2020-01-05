@@ -1,7 +1,7 @@
 import sys
 import logging
 from optparse import OptionParser
-from slack_utils.functions import api_test, auth_test, incoming_webhook, post, conv_list
+from slack_utils.functions import api_test, auth_test, incoming_webhook, post, post_quote, conv_list
 """
 実行例:
   $ slack_utils api_test
@@ -49,6 +49,14 @@ def command (argv:list):
         else:    
             logging.warning('Usage -> $ slack_utils post ${message}')
             exit (1)
+
+    elif command == "post_quote":
+        if argv[1:2]:
+            post_quote (argv[1:])
+        else:    
+            logging.warning('Usage -> $ slack_utils post_quote ${message}')
+            exit (1)
+
 
     elif command == "conv_list":
         """

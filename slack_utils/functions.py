@@ -18,6 +18,7 @@ urllibによるHTTPリクエストでエラーがあった場合は、
 * Slack API による結果取得のレスポンスボディにおいて、 "ok": false だった場合 → 61 秒まってリトライし、それでもダメなら stdout にエラーを出力して終了
 """
 
+## API実行用クラス
 class Exec_api:
 
 #    def __init__(self):
@@ -83,6 +84,8 @@ class Exec_api:
 
         return body
 
+## functions ##
+
 def api_test ():
     """
     https://api.slack.com/methods/api.test
@@ -138,6 +141,23 @@ def post (argv:list):
     res = Exec_api ()
     res.conf ()
     message = str(argv[0])
+    method = "POST"
+    headers = {
+        "Content-Type": "application/json",
+    }
+    url = "https://slack.com/api/chat.postMessage?token=" + token + "&channel=" + channel + "&text=" + message
+    req = urllib.request.Request (url, method=method, headers=headers)
+    body = res.exec (req)
+    print (json.dumps(body, indent=4))
+    return 0
+
+def post_quote (argv:list):
+    """
+    https://api.slack.com/methods/chat.postMessage
+    """
+    res = Exec_api ()
+    res.conf ()
+    message = "```" + str(argv[0]) + "```"
     method = "POST"
     headers = {
         "Content-Type": "application/json",
