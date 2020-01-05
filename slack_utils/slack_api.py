@@ -56,7 +56,7 @@ class Exec_api:
         except urllib.error.HTTPError as err:
             logging.warn ("catch HTTPError:" + str(err.code))
             logging.info ("retry once")
-            time.sleep(11) #61に直す
+            time.sleep(61)
     
             try:
                 with urllib.request.urlopen(req) as res:
