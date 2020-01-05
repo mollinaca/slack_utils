@@ -12,32 +12,29 @@ def main():
         formatter_class=RawTextHelpFormatter,
         add_help=True
     )
-    commands=(" \n"
+    commands = ['test', 'api_test', 'auth_test', 'incoming_webhook', 'post', 'conv_list']
+    command_help = (" \n"
     " api_test : exec api.test \n"
     " auth_test : exec auth.test \n"
     " incoming_webhook [text] : post text message via incoming webhook \n"
     "\n"
-    " post -c [channel_id|channel_name] -t [text] : post text message via chat.Postmessage \n"
+    " post -c [channel_id|channel_name] -m [text] : post text message via chat.Postmessage \n"
     "\t channel_id\t: for example, CXXXXXXXX, or GXXXXXXXX\n"
     "\t channel_name\t: for example, yourchannel\n"
     "\n"
     " conv_list -t [public|private] -e [true|false] : get conversations list via conversations.list \n"
     "\t -t : types, private or public. default: both of public and private \n"
     "\t -e : exclude_archived, default: true\n")
-    parser.add_argument("command", choices=['api_test','auth_test','incoming_webhook','post','conv_list'], help=commands)
+
+    parser.add_argument('command', choices=commands, help=command_help)
+    parser.add_argument('-c', '--channel', help='channel_id or channel_name (default set in config.ini)')
+    parser.add_argument('-m', '--message', help='simple string message to post (default "no message")', default='no message')
+    parser.add_argument('-t', '--types', help='type of target channels (default both of public and private)', default='public_channel, private_channel')
+    parser.add_argument('-e', '--exclude_archives', help='exclude_archives (default true)', default='true')
     args = parser.parse_args()
-
-    print (args)
-    command = str(args.command)
-    logging.info('command:'+command)
-    print (sys.argv)
-
-#    if args.verbosity:
-#        print("verbosity turned on")
 
     logging.basicConfig(level=logging.INFO)
     logging.info('Started')
     logging.info(str(sys.argv))
 
-    if sys.argv[1:2]:
-        sys.exit(core(command, sys.argv[2:]))
+    sys.exit(core(args))

@@ -28,12 +28,12 @@ class Exec_api:
         """
         load config.ini to global variables
         """
-        global token, channel, webhook_url, api_url
+        global token, default_channel, webhook_url, api_url
 
         cfg = configparser.ConfigParser()
         cfg.read(os.path.dirname(__file__)+"/config.ini")
         token = cfg["slack"]["token"]
-        channel = cfg["slack"]["channel"]
+        default_channel = cfg["slack"]["channel"]
         webhook_url = cfg["slack"]["webhook_url"]
         api_url = "https://slack.com/api/"
         
@@ -89,6 +89,7 @@ class Api():
         """
         res = Exec_api ()
         url = "https://slack.com/api/api.test"
+
         req = urllib.request.Request(url)
         res = Exec_api ()
         body = res.exec (req)
@@ -104,18 +105,18 @@ class Api():
         params = {
             'token': token,
         }
+
         req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)))
         body = res.exec (req)
         return body
 
-    def incoming_webhook (self, argv:list):
+    def incoming_webhook (self, message:str):
         """
         use incoimng-webhook
         incoming-webhook は結果をjsonで返さないので、これだけ特殊処理
         """
         res = Exec_api ()
         res.conf ()
-        message = str(argv[0])
         data = {
             "text": message
         }
@@ -123,6 +124,7 @@ class Api():
             "Content-Type": "application/json",
         }
         url = webhook_url
+
         req = urllib.request.Request(url, json.dumps(data).encode(), headers)
         with urllib.request.urlopen(req) as res:
             body = res.read().decode('utf-8')
@@ -131,19 +133,30 @@ class Api():
                 body = json.loads('{"ok": true}')
         return body
 
-    def post (self, argv:list):
+    def post (self, args:list):
         """
         https://api.slack.com/methods/chat.postMessage
         """
         res = Exec_api ()
         res.conf ()
-        message = str(argv[0])
         method = "POST"
+        message = str(args['message'])
+        if 'channel' in args:
+            channel = str(args['channel'])
+        else:
+            channel = default_channel
         headers = {
             "Content-Type": "application/json",
         }
-        url = "https://slack.com/api/chat.postMessage?token=" + token + "&channel=" + channel + "&text=" + message
-        req = urllib.request.Request (url, method=method, headers=headers)
+
+        url = "https://slack.com/api/chat.postMessage"
+        params = {
+            'token': token,
+            'channel': channel,
+            'text': message
+        }
+
+        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method, headers=headers)
         body = res.exec (req)
         return body
 

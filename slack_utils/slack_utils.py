@@ -19,7 +19,12 @@ def usage ():
     print (message)
     exit (1)
 
-def core (command:str, argv:list):
+
+def core (args):
+
+    if str(args.command):
+        command = str(args.command)
+
     if command == "test":
         print ("test")
         exit (0)
@@ -31,10 +36,18 @@ def core (command:str, argv:list):
         auth_test ()
 
     elif command == "incoming_webhook":
-        incoming_webhook (argv[1:])
+        args_d = {
+            'message' : args.message
+        }
+        incoming_webhook (args_d)
 
     elif command == "post":
-        post (argv[0:])
+        args_d = {
+            'message' : str(args.message)
+        }
+        if not str(args.channel) == "None":
+            args_d['channel'] = str(args.channel)
+        post (args_d)
 
 #    elif command == "post_quote":
 #        if argv[1:2]:
@@ -43,10 +56,10 @@ def core (command:str, argv:list):
 #            logging.warning('Usage -> $ slack_utils post_quote ${message}')
 #            exit (1)
 
-    elif command == "conv_list":
-        print (argv)
-        logging.info('conv_list()')
-        conv_list (argv[0:])
+#    elif command == "conv_list":
+#        print (argv)
+#        logging.info('conv_list()')
+#        conv_list (argv[0:])
 
     else:
         usage ()

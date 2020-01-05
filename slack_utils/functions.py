@@ -30,11 +30,42 @@ def auth_test ():
     print (json.dumps(res, indent=4))
     exit (0)
 
-def incoming_webhook (argv:list):
-    if not argv[0:1]:
-        logging.warning('Usage -> $ slack_utils incoming_webhook ${message}')
-        exit (1)
+def incoming_webhook (args:dict):
+    message = str(args['message'])
     api = Api ()
-    res = api.incoming_webhook (argv)
+    res = api.incoming_webhook (message)
     print (json.dumps(res, indent=4))
     exit (0)
+
+def post (args:dict):
+    api = Api ()
+    res = api.post (args)
+    print (json.dumps(res, indent=4))
+    exit (0)
+
+def conv_list (argv:list):
+    if argv[0:1]:
+        if argv[0] == "public":
+            argv.insert (0, "public_channel")
+        elif argv[0] == "private":
+            argv.insert (0, "private_channel")
+        else:
+            argv.insert (0, "public_channel,private_channel")
+    else:
+        argv.insert (0, "public_channel,private_channel")
+
+    if argv[1:2]:
+        if not argv[1] == "true" or not argv[1] == "true" :
+            argv.insert(1, "true")
+    else:
+        argv.insert(1, "true")
+
+    next_cursor = "default"
+    argv.insert (2, next_cursor)
+    while not next_cursor:
+        api = Api ()
+        res = api.conv_list (argv)
+        print (json.dumps(res, indent=4))
+
+    exit (0)
+
