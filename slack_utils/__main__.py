@@ -12,13 +12,16 @@ def main():
         formatter_class=RawTextHelpFormatter,
         add_help=True
     )
-    commands = ['test', 'api_test', 'auth_test', 'incoming_webhook', 'post', 'conv_list']
+    commands = ['test', 'api_test', 'auth_test', 'incoming_webhook', 'post', 'post_quote', 'conv_list']
     command_help = (" \n"
     " api_test : exec api.test \n"
     " auth_test : exec auth.test \n"
     " incoming_webhook [text] : post text message via incoming webhook \n"
     "\n"
     " post -c [channel_id|channel_name] -m [text] : post text message via chat.Postmessage \n"
+    "\t channel_id\t: for example, CXXXXXXXX, or GXXXXXXXX\n"
+    "\t channel_name\t: for example, yourchannel\n"
+    " post_quote -c [channel_id|channel_name] -m [text] : post text message via chat.Postmessage. Automaticaly add blockquote(```) to message \n"
     "\t channel_id\t: for example, CXXXXXXXX, or GXXXXXXXX\n"
     "\t channel_name\t: for example, yourchannel\n"
     "\n"
