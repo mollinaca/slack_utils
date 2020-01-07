@@ -80,3 +80,9 @@ def conv_list (args:dict):
     print ("output files:")
     [print (output_file) for output_file in output_files]
     exit (0)
+
+def conv_info (args:dict):
+    api = Api ()
+    res = api.conv_info (args)
+    print (json.dumps(res, indent=4))
+    exit (0)

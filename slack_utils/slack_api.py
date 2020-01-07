@@ -81,6 +81,7 @@ class Exec_api:
 
         return body
 
+
 class Api():
 
     def api_test (self):
@@ -185,6 +186,32 @@ class Api():
         if args['next_cursor']:
             params['cursor'] = args['next_cursor']
 
+        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
+        body = res.exec (req)
+
+        return body
+
+    def conv_info (self, args:dict):
+        """
+        https://api.slack.com/methods/conversations.info
+        arg:
+            channel:
+        default:
+            channel: set in config.ini
+        """
+        res = Exec_api ()
+        res.conf ()
+        method = "GET"
+        url = "https://slack.com/api/conversations.info"
+        if not args['channel']:
+            args['channel']=default_channel
+
+        params = {
+            'token': token,
+            'channel': args['channel']
+        }
+
+        print (params)
         req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
         body = res.exec (req)
 

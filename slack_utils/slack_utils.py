@@ -1,6 +1,6 @@
 import sys
 import logging
-from slack_utils.functions import api_test, auth_test, incoming_webhook, post, conv_list
+from slack_utils.functions import api_test, auth_test, incoming_webhook, post, conv_info, conv_list
 """
 実行例:
   $ slack_utils api_test
@@ -64,6 +64,12 @@ def core (args):
             'next_cursor': ""
         }
         conv_list (args_d)
+
+    elif command == "conv_info":
+        args_d = {
+            'channel' : args.channel,
+        }
+        conv_info (args_d)
 
     else:
         usage ()
