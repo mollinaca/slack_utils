@@ -40,7 +40,6 @@ def incoming_webhook (args:dict):
     exit (0)
 
 def post (args:dict):
-    print (args)
     api = Api ()
     res = api.post (args)
     print (json.dumps(res, indent=4))

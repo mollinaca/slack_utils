@@ -138,7 +138,6 @@ class Api():
         """
         https://api.slack.com/methods/chat.postMessage
         """
-        print (args)
         res = Exec_api ()
         res.conf ()
         method = "POST"
@@ -162,7 +161,6 @@ class Api():
         if 'thread' in args:
             params['thread_ts'] = args['thread']
 
-        print (params)
         req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method, headers=headers)
         body = res.exec (req)
         return body
