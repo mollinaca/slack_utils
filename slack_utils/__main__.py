@@ -18,12 +18,14 @@ def main():
     " auth_test : exec auth.test \n"
     " incoming_webhook [text] : post text message via incoming webhook \n"
     "\n"
-    " post -c [channel_id|channel_name] -m [text] : post text message via chat.Postmessage \n"
+    " post -c [channel_id|channel_name] -m [text] --thread [thread] : post text message via chat.Postmessage \n"
     "\t channel_id\t: for example, CXXXXXXXX, or GXXXXXXXX\n"
     "\t channel_name\t: for example, yourchannel\n"
     " post_quote -c [channel_id|channel_name] -m [text] : post text message via chat.Postmessage. Automaticaly add blockquote(```) to message \n"
-    "\t channel_id\t: for example, CXXXXXXXX, or GXXXXXXXX\n"
-    "\t channel_name\t: for example, yourchannel\n"
+    "\t --thread\t: if you want to post to thread, input this param (option)"
+    "\t -c:\n"
+    "\t\t channel_id\t: for example, CXXXXXXXX, or GXXXXXXXX\n"
+    "\t\t channel_name\t: for example, yourchannel\n"
     "\n"
     " conv_list -t [public|private] -e [true|false] : get conversations list via conversations.list \n"
     "\t -t : types, private or public. default: both of public and private \n"
@@ -36,6 +38,7 @@ def main():
     parser.add_argument('-m', '--message', help='simple string message to post (default "no message")', default='no message')
     parser.add_argument('-t', '--types', help='type of target channels (default both of public and private)', default='public_channel, private_channel')
     parser.add_argument('-e', '--exclude_archived', help='exclude_archived(default true)', default='true')
+    parser.add_argument('--thread', help='thread to post')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.INFO)

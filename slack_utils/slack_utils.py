@@ -47,6 +47,8 @@ def core (args):
         }
         if not str(args.channel) == "None":
             args_d['channel'] = str(args.channel)
+        if not str(args.thread) == "None":
+            args_d['thread'] = str(args.thread)
         post (args_d)
 
     elif command == "post_quote":
