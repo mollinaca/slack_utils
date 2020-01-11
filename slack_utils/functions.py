@@ -55,8 +55,8 @@ def conv_list (args:dict):
     # 結果をファイル出力する
     output_files = []
     i = 1
-    p = pathlib.Path()
-    output_file_dir = p.resolve().joinpath('output')
+    p = pathlib.Path(__file__)
+    output_file_dir = p.resolve().parent.parent.joinpath('output')
     output_file = str(output_file_dir) + "/conv_list_" + now + "_" + str(i) + ".json"
     output_files.append(output_file)
     with open(output_file, mode='w') as f:
@@ -73,7 +73,7 @@ def conv_list (args:dict):
             res = api.conv_list (args)
             output_file = str(output_file_dir) + "/conv_list_" + now + "_" + str(i) + ".json"
             output_files.append(output_file)
-            with open(output_file, mode='w') as f:
+            with open(output_file, mode='a') as f:
                 f.write(json.dumps(res, indent=4))
             args['next_cursor'] = res['response_metadata']['next_cursor']
 
