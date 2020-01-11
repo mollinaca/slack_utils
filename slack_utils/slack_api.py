@@ -42,16 +42,24 @@ class Exec_api:
 
     def exec (self, req):
         """
-        slack API を実行する
+        explanation:
+            exec Slack API
+        
+        Args:
+            req: urllib request object
+        
+        Return:
+            body: Json object
+        
         正常に完了した場合は レスポンスボディ を返す
-        失敗した場合は、以下の json を返す
+        失敗した場合は、以下の内容 json を返す
         { "ok": false}
         """
-        body = json.loads(b'{"ok": false}')
+        body = json.dumps(b'{"ok": false}'.decode('utf-8'))
 
         try:
             with urllib.request.urlopen(req) as res:
-                body = json.loads(res.read().decode('utf-8'))
+                body = json.dumps(res.read().decode('utf-8'))
                 logging.info ("responsebody:")
         except urllib.error.HTTPError as err:
             logging.warn ("catch HTTPError:" + str(err.code))
@@ -60,7 +68,7 @@ class Exec_api:
     
             try:
                 with urllib.request.urlopen(req) as res:
-                    body = json.loads(res.read().decode('utf-8'))
+                    body = json.dumps(res.read().decode('utf-8'))
                     logging.info ("responsebody:")
             except urllib.error.HTTPError as err:
                 logging.warn ("catch HTTPError:" + str(err.code))
@@ -73,7 +81,7 @@ class Exec_api:
     
             try:
                 with urllib.request.urlopen(req) as res:
-                    body = json.loads(res.read().decode('utf-8'))
+                    body = json.dumps(res.read().decode('utf-8'))
                     logging.info ("responsebody:")
             except urllib.error.URLError as err:
                     logging.warn ("catch URLError:" + str(err.reason))
