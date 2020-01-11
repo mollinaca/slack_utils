@@ -77,7 +77,6 @@ def conv_list (args:dict):
                 f.write(json.dumps(res, indent=4))
             args['next_cursor'] = res['response_metadata']['next_cursor']
 
-    print ("output files:")
     [print (output_file) for output_file in output_files]
     exit (0)
 
@@ -109,7 +108,7 @@ def conv_id_list (args:dict):
                     f.write(res['channels'][i]['id']+"\n")
             args['next_cursor'] = res['response_metadata']['next_cursor']
 
-    print ("output file: " + output_file)
+    print (output_file)
     exit (0)
 
 def conv_info (args:dict):
