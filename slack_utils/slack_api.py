@@ -148,19 +148,19 @@ class Api():
         """
         res = Exec_api ()
         res.conf ()
+        url = "https://slack.com/api/chat.postMessage"
         method = "POST"
         message = str(args['message'])
+
         if 'channel' in args:
             channel = str(args['channel'])
         else:
             channel = default_channel
-        if 'thread' in args:
-            thread = str(args['thread'])
+
         headers = {
             "Content-Type": "application/json",
         }
 
-        url = "https://slack.com/api/chat.postMessage"
         params = {
             'token': token,
             'channel': channel,
