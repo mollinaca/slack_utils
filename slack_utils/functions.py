@@ -92,7 +92,7 @@ def conv_id_list (args:dict):
     output_file_dir = p.resolve().parent.parent.joinpath('output')
     output_file = str(output_file_dir) + "/conv_id_list_" + now + ".txt"
     with open(output_file, mode='w') as f:
-        for i in range(0,len(res['channels'])):
+        for i in range(len(res['channels'])):
             f.write(res['channels'][i]['id']+"\n")
         
     # next_cursor の有無を確認する
@@ -104,7 +104,7 @@ def conv_id_list (args:dict):
             api = Api ()
             res = api.conv_list (args)
             with open(output_file, mode='a') as f:
-                for i in range(0,len(res['channels'])):
+                for i in range(len(res['channels'])):
                     f.write(res['channels'][i]['id']+"\n")
             args['next_cursor'] = res['response_metadata']['next_cursor']
 
@@ -118,6 +118,41 @@ def conv_info (args:dict):
     exit (0)
 
 def users_list (args:dict):
+    now = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
+
+    # まず1回実行する
+    api = Api ()
+    res = api.users_list (args)
+
+    # 結果をファイル出力する
+    output_files = []
+    i = 1
+    p = pathlib.Path(__file__)
+    output_file_dir = p.resolve().parent.parent.joinpath('output')
+    output_file = str(output_file_dir) + "/users_list_" + now + "_" + str(i) + ".json"
+    output_files.append(output_file)
+    with open(output_file, mode='w') as f:
+        f.write(json.dumps(res, indent=4))
+        
+    # next_cursor の有無を確認する
+    if res['response_metadata']['next_cursor']:
+        args['next_cursor'] = str(res['response_metadata']['next_cursor'])
+
+        while args['next_cursor']:
+            # next_cursor が空になるまで実行する
+            i += 1
+            api = Api ()
+            res = api.users_list (args)
+            output_file = str(output_file_dir) + "/users_list_" + now + "_" + str(i) + ".json"
+            output_files.append(output_file)
+            with open(output_file, mode='a') as f:
+                f.write(json.dumps(res, indent=4))
+            args['next_cursor'] = res['response_metadata']['next_cursor']
+
+    [print (output_file) for output_file in output_files]
+    exit (0)
+
+def users_id_list (args:dict):
     now = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
 
     # まず1回実行する
