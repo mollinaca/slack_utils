@@ -12,7 +12,7 @@ def main():
         formatter_class=RawTextHelpFormatter,
         add_help=True
     )
-    commands = ['test', 'api_test', 'auth_test', 'incoming_webhook', 'post', 'post_quote', 'conv_list', 'conv_id_list', 'conv_info']
+    commands = ['test', 'api_test', 'auth_test', 'incoming_webhook', 'post', 'post_quote', 'conv_list', 'conv_id_list', 'conv_info', 'users_list']
     command_help = (" \n"
     " api_test : exec api.test \n"
     " auth_test : exec auth.test \n"
@@ -32,6 +32,7 @@ def main():
     "\t -t : types, private or public. default: both of public and private \n"
     "\t -e : exclude_archived, default: true\n")
     " conv_info -c [channel_id|channel_name] : get conversations info via conversations.info \n"
+    " users_list : get users list via users.list \n"
 
 
     parser.add_argument('command', choices=commands, help=command_help)

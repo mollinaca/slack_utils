@@ -229,3 +229,27 @@ class Api():
 
         return body
 
+
+    def users_list (self, args:dict):
+        """
+        https://api.slack.com/methods/users.list
+        arg:
+            next_cursor
+        default:
+            next_cursor: null
+        """
+        res = Exec_api ()
+        res.conf ()
+        method = "GET"
+        url = "https://slack.com/api/users.list"
+        params = {
+            'token': token,
+            'limit': 1000
+        }
+        if args['next_cursor']:
+            params['cursor'] = args['next_cursor']
+
+        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
+        body = res.exec (req)
+
+        return body
