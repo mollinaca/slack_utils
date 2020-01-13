@@ -5,14 +5,14 @@ import urllib.request
 import json
 import time
 """
-SlackAPI を使ったHTTPリクエストとその結果の取得し、レスポンスボディとして return する
+SlackAPI を使ったHTTPリクエストを実行し、その結果を取得し、json object (dict) を return する
 urllibによるHTTPリクエストでエラーがあった場合は、
 以下の順番でエラー処理する
-* HTTP通信自体の失敗 → 11秒まってリトライし、それでもダメなら stdout にエラーを出力  
-* HTTP通信が 4xx,5xx だった場合 → 61 秒まってリトライし、それでもダメなら stdout にエラーを出力して終了
+* HTTP通信自体の失敗 → 11秒まってリトライし、それでもダメなら ok:false の json を return し、標準出力にエラーメッセージを出力する
+* HTTP通信が 4xx,5xx だった場合 → 61 秒まってリトライし、それでもダメなら ok:false の json を return し、標準出力にエラーメッセージを出力する
   * Slack API による rate limit (HTTP429) だった場合を含む
      About Rate Limit: https://api.slack.com/docs/rate-limits
-* Slack API による結果取得のレスポンスボディにおいて、 "ok": false だった場合 → 61 秒まってリトライし、それでもダメなら stdout にエラーを出力して終了
+* Slack API による結果取得のレスポンスボディにおいて、 "ok": false だった場合 → 61 秒まってリトライし、それでもダメなら ok:false の json を return し、標準出力にエラーメッセージを出力する
 """
 
 ## API実行用クラス
@@ -60,7 +60,6 @@ class Exec_api:
         try:
             with urllib.request.urlopen(req) as res:
                 body = json.loads(res.read().decode('utf-8'))
-                logging.info ("responsebody:")
         except urllib.error.HTTPError as err:
             logging.warn ("catch HTTPError:" + str(err.code))
             logging.info ("retry once")
@@ -69,7 +68,6 @@ class Exec_api:
             try:
                 with urllib.request.urlopen(req) as res:
                     body = json.loads(res.read().decode('utf-8'))
-                    logging.info ("responsebody:")
             except urllib.error.HTTPError as err:
                 logging.warn ("catch HTTPError:" + str(err.code))
                 logging.info ("err, end")
@@ -82,7 +80,6 @@ class Exec_api:
             try:
                 with urllib.request.urlopen(req) as res:
                     body = json.loads(res.read().decode('utf-8'))
-                    logging.info ("responsebody:")
             except urllib.error.URLError as err:
                     logging.warn ("catch URLError:" + str(err.reason))
                     logging.info ("err, end")
