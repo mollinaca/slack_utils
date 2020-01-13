@@ -223,7 +223,6 @@ class Api():
             'channel': args['channel']
         }
 
-        print (params)
         req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
         body = res.exec (req)
 
