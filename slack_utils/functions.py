@@ -117,6 +117,12 @@ def conv_info (args:dict):
     print (json.dumps(res, indent=4))
     exit (0)
 
+def conv_history (args:dict):
+    api = Api ()
+    res = api.conv_history (args)
+    print (json.dumps(res, indent=4))
+    exit (0)
+
 def users_list (args:dict):
     now = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
 

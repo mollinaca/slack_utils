@@ -214,7 +214,7 @@ class Api():
         res = Exec_api ()
         res.conf ()
         method = "GET"
-        url = "https://slack.com/api/conversations.info"
+        url = "https://slack.com/api/conversations.history"
         if not args['channel']:
             args['channel']=default_channel
 
@@ -229,6 +229,30 @@ class Api():
 
         return body
 
+    def conv_history (self, args:dict):
+        """
+        https://api.slack.com/methods/conversations.history
+        arg:
+            channel:
+            next_cursor:
+        """
+        res = Exec_api ()
+        res.conf ()
+        method = "GET"
+        url = "https://slack.com/api/conversations.info"
+        if not args['channel']:
+            args['channel']=default_channel
+
+        params = {
+            'token': token,
+            'channel': args['channel']
+        }
+        if args['next_cursor']:
+            params['cursor'] = args['next_cursor']
+
+        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
+        body = res.exec (req)
+        return body
 
     def users_list (self, args:dict):
         """
