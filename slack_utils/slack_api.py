@@ -28,12 +28,13 @@ class Exec_api:
         """
         load config.ini to global variables
         """
-        global token, default_channel, webhook_url, api_url
+        global token, default_channel, default_user, webhook_url, api_url
 
         cfg = configparser.ConfigParser()
         cfg.read(os.path.dirname(__file__)+"/config.ini")
         token = cfg["slack"]["token"]
         default_channel = cfg["slack"]["channel"]
+        default_user = cfg["slack"]["user"]
         webhook_url = cfg["slack"]["webhook_url"]
         api_url = "https://slack.com/api/"
         
@@ -273,3 +274,28 @@ class Api():
         body = res.exec (req)
 
         return body
+
+    def users_info (self, args:dict):
+        """
+        https://api.slack.com/methods/users.info
+        arg:
+            user: 
+        default:
+            user: self(this token's account)
+        """
+        res = Exec_api ()
+        res.conf ()
+        method = "GET"
+        url = "https://slack.com/api/users.info"
+        if not args['user']:
+            args['user'] = default_user
+        params = {
+            'token': token,
+            'user': args['user']
+        }
+
+        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method)
+        body = res.exec (req)
+
+        return body
+        

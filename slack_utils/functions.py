@@ -192,3 +192,9 @@ def users_id_list (args:dict):
 
     [print (output_file) for output_file in output_files]
     exit (0)
+
+def users_info (args:dict):
+    api = Api ()
+    res = api.users_info (args)
+    print (json.dumps(res, indent=4))
+    exit (0)

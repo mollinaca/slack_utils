@@ -1,6 +1,6 @@
 import sys
 import logging
-from slack_utils.functions import api_test, auth_test, incoming_webhook, post, conv_info, conv_list, conv_id_list, conv_history, users_list
+from slack_utils.functions import api_test, auth_test, incoming_webhook, post, conv_info, conv_list, conv_id_list, conv_history, users_list, users_info
 """
 実行例:
   $ slack_utils api_test
@@ -93,6 +93,12 @@ def core (args):
             'next_cursor' : "",
         }
         users_list (args_d)
+
+    elif command == "users_info":
+        args_d = {}
+        if not str(args.user) == "None":
+            args_d['user'] = str(args.user)
+        users_info (args_d)
 
     else:
         usage ()
