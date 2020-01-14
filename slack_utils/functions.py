@@ -45,6 +45,41 @@ def post (args:dict):
     print (json.dumps(res, indent=4))
     exit (0)
 
+def admin_inviteRequest_list (args:dict):
+    now = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
+
+    # まず1回実行する
+    api = Api()
+    res = api.admin_inviteRequest_list (args)
+
+    # 結果をファイル出力する
+    output_files = []
+    i = 1
+    p = pathlib.Path(__file__)
+    output_file_dir = p.resolve().parent.parent.joinpath('output')
+    output_file = str(output_file_dir) + "/invite_list_" + now + "_" + str(i) + ".json"
+    output_files.append(output_file)
+    with open(output_file, mode='w') as f:
+        f.write(json.dumps(res, indent=4))
+
+    # next_cursor の有無を確認する
+    if res['response_metadata']['next_cursor']:
+        args['next_cursor'] = str(res['response_metadata']['next_cursor'])
+
+        while args['next_cursor']:
+            # next_cursor が空になるまで実行する
+            i += 1
+            api = Api ()
+            res = api.conv_list (args)
+            output_file = str(output_file_dir) + "/invite_list_" + now + "_" + str(i) + ".json"
+            output_files.append(output_file)
+            with open(output_file, mode='a') as f:
+                f.write(json.dumps(res, indent=4))
+            args['next_cursor'] = res['response_metadata']['next_cursor']
+
+    [print (output_file) for output_file in output_files]
+    exit (0)
+
 def conv_list (args:dict):
     now = str(datetime.datetime.now().strftime("%Y%m%d_%H%M%S"))
 

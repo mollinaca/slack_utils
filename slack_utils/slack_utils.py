@@ -1,6 +1,6 @@
 import sys
 import logging
-from slack_utils.functions import api_test, auth_test, incoming_webhook, post, conv_info, conv_list, conv_id_list, conv_history, users_list, users_info
+from slack_utils.functions import api_test, auth_test, incoming_webhook, post, admin_inviteRequest_list, conv_info, conv_list, conv_id_list, conv_history, users_list, users_info
 """
 実行例:
   $ slack_utils api_test
@@ -58,6 +58,10 @@ def core (args):
         if not str(args.channel) == "None":
             args_d['channel'] = str(args.channel)
         post (args_d)
+
+    elif command == "inviteRequest_list":
+        args_d = {}
+        admin_inviteRequest_list (args_d)
 
     elif command == "conv_list":
         args_d = {

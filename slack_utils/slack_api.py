@@ -171,6 +171,32 @@ class Api():
         body = res.exec (req)
         return body
 
+    def admin_inviteRequest_list (self, args:dict):
+        """
+        https://api.slack.com/methods/admin.inviteRequests.list
+        arg:
+            next_cursor
+        default:
+            next_cursor: null
+        """
+        res = Exec_api ()
+        res.conf ()
+        url = "https://slack.com/api/admin.inviteRequests.list"
+        method = "POST"
+        headers = {
+            "Content-Type": "application/json",
+        }
+        params={
+            'token': token,
+            'limit': 100
+        }
+        if 'next_cursor' in args:
+            params['cursor'] = args['next_cursor']
+
+        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method=method, headers=headers)
+        body = res.exec (req)
+        return body
+
     def conv_list (self, args:dict):
         """
         https://api.slack.com/methods/conversations.list
